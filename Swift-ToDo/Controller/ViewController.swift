@@ -47,10 +47,10 @@ class ViewController: UITableViewController {
             newItem.jobName = textField.text!
             newItem.iscompleted = false
             
-            self.itemArray.append(newItem)
-            //self.defaults.set(self.itemArray, forKey: "TodoListArray")
-            self.tableView.reloadData()
-            
+            DispatchQueue.main.async {
+                self.itemArray.append(newItem)
+                self.tableView.reloadData()
+            }
         }
         alert.addTextField { (alertTextField) in
             alertTextField.placeholder = "Yapılacaklarınızı yazın"
