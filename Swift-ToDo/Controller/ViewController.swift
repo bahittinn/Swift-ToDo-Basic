@@ -18,29 +18,16 @@ class ViewController: UITableViewController {
         super.viewDidLoad()
         todoTableView.delegate = self
         todoTableView.dataSource = self
-        
-        let newItem = todoModel()
-        newItem.jobName = "İşe Git"
-        newItem.iscompleted = true
-        itemArray.append(newItem)
-        
-        let newItem2 = todoModel()
-        newItem2.jobName = "Alışveriş Yap"
-        newItem2.iscompleted = false
-        itemArray.append(newItem2)
-        
-        let newItem3 = todoModel()
-        newItem3.jobName = "Swift Çalış"
-        newItem3.iscompleted = false
-        itemArray.append(newItem3)
+        if let items = UserDefaults.standard.stringArray(forKey: "items") as? [String] {
+            let newItem = todoModel()
+            itemArray.append(newItem)
+        }
     }
     
     
     @IBAction func addButtonPressed(_ sender: Any) {
         var textField = UITextField()
-        
         let alert = UIAlertController(title: "Ekleme Yap", message: "", preferredStyle: .alert)
-        
         let action = UIAlertAction(title: "Ekle", style: .default) { (action) in
             print(textField.text!)
             let newItem = todoModel()
@@ -48,7 +35,11 @@ class ViewController: UITableViewController {
             newItem.iscompleted = false
             
             DispatchQueue.main.async {
+                var currentItems = UserDefaults.standard.array(forKey: "items")
+                currentItems?.append([textField.text])
+                
                 self.itemArray.append(newItem)
+                UserDefaults.standard.setValue([currentItems], forKey: "items")
                 self.tableView.reloadData()
             }
         }
